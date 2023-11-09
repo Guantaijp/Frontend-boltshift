@@ -1,0 +1,154 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+}
+
+.container {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* CategoryCard.css */
+.gradient-border {
+  border: 2px solid transparent;
+  border-radius: 8px !important;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+
+
+.gradient-border:hover {
+  border-image: linear-gradient(to bottom, rgb(247, 79, 172), rgb(252, 178, 79)) 3;
+  border-radius: 12px !important;
+  box-shadow: 0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814;
+}
+
+
+
+.custom-tabs .ant-tabs-tab.ant-tabs-tab-active {
+  border-bottom: 2px solid #4D0039 !important;
+  z-index: 2;
+  color: #4D0039 !important;
+}
+
+.myComponent:hover {
+  box-shadow: 0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08);
+}
+.myBtn:hover{
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+}
+.login {
+  background-image: url('../src/assets/Background\ Image.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  
+}
+.signup {
+  background-image: url('../src/assets/sigup/Image\ \(1\).png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+}
+
+
+
+.phone-input {
+  outline: none;
+}
+
+.put:focus {
+  box-shadow: 0px 0px 0px 4px #F4EBFF !important;;
+  /*box-shadow: 0px 0px 0px -12px rgba(230, 127, 203, 1) */
+  border-color: #E67FCA!important;
+
+}
+
+.centered-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  position: absolute;
+  bottom: 0; /* Adjust this value to control the vertical position */
+  left: 0; /* Adjust this value to control the horizontal position */
+  width: 100%;
+  background-color: black; /* Set the background color as needed */
+}
+
+.slick-dots li {
+  margin: 0 5px; /* Adjust the spacing between dots as needed */
+}
+
+.slick-dots button {
+  width: 10px; /* Adjust the width of the dots as needed */
+  height: 10px; /* Adjust the height of the dots as needed */
+  border-radius: 50%;
+  background-color: #000; /* Change the color of the dots as needed */
+}
+
+@media (max-width: 640px) {
+  .slider-container {
+    /* Adjust the container width for smaller screens */
+    width: 100%;
+  }
+  .slider-item {
+    /* Adjust item styles for smaller screens */
+    width: 100%;
+  }
+}
+.slick-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Add this CSS to your stylesheet */
+.sticky {
+  position: sticky !important;
+  top: 0;
+
+  width: 100%;
+  z-index: 2000; /* Adjust the z-index as needed to layer it correctly */
+
+}
+
+.larger-item {
+  /* Define the larger size here */
+ width: 330px; /* Adjust as needed */
+}
+
+.ScrollAreaRoot {
+  width: 100%;
+  height: 100%;
+}
+
+.ScrollAreaViewport {
+  width: 100%;
+  height: 100%;
+}
+
+.ScrollAreaScrollbar {
+  width: 4px;
+  padding: 5px 2px;
+}
+
+.ScrollAreaThumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+
