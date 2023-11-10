@@ -1,64 +1,35 @@
-import React from 'react';
-import seat3 from '../../assets/seat3.svg';
-import coffeTable from '../../assets/coffetabe2.svg';
-import chain2 from '../../assets/chain2.svg';
+import React, {useEffect} from 'react';
 import Selected from '../../assets/State=Selected.svg';
 import Default from '../../assets/State=Default.svg';
 import { useState } from 'react';
 import fire2 from '../../assets/1F525_Fire_v13_Still 1.svg';
-import vase2 from '../../assets/vase2.svg';
-import seat4 from '../../assets/seet4.svg';
 import "../../App.css"
+import {getProductAsyc} from '../../store/reducers/products.reducer.ts'
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from 'react-router-dom';
 
-interface Feature {
-  id: number;
-  name: string;
-  image: string;
-  price: number;
-  left: number;
-}
+
 
 const FeatureCard2: React.FC = () => {
-  const features: Feature[] = [
-    {
-      id: 1,
-      name: 'Mercer41 Annemargaret 90.5" Round Arm Sofa Polyester/Polyester Blend in Blue, Size 34.5 H x 90.5 W x 35.5 D in | Wayfair',
-      image: seat3,
-      price: 92372.97,
-      left: 25,
-    },
-    {
-      id: 2,
-      name: 'Turin Modern Coffee Tables 14.57"D+17.72"D',
-      image: coffeTable,
-      price: 63436.03,
-      left: 53,
-    },
-    {
-      id: 3,
-      name: 'Chain Design Drop Earrings',
-      image: chain2,
-      price: 6073.07,
-      left: 31,
-    },
-    {
-      id: 4,
-      name: 'Snuggle Circular Hollow Ceramic Vase - Donuts Vase - Nordic Flower Pot - Home Decoration - Living Room Decoration - Ceramic Vase',
-      image: vase2,
-      price: 80020.24,
-      left: 51,
-    },
-    {
-      id: 5,
-      name: 'Modern White Velvet 3-Seater Sofa Channel Tufted Upholstered Luxury Solid Wood',
-      image: seat4,
-      price: 70977.04,
-      left: 67,
-    },
-  ];
 
-  const [selectedItems, setSelectedItems] = useState<Feature[]>([]);
-  const handleImageClick = (deal: Feature) => {
+
+  const dispatch = useDispatch();
+  const products = useSelector((state:any) => state.products.products);
+
+  const fetchData = async () => {
+    const response = await dispatch(getProductAsyc() as any);
+  }
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const featureProductData = products.filter((item:any) => {
+    return item.attributes.sub_category.data.attributes.name === "featuredProducts";
+  });
+
+
+  const [selectedItems, setSelectedItems] = useState([]);
+  const handleImageClick = (deal:any) => {
     const isItemSelected = selectedItems.some((item) => item.id === deal.id);
     if (isItemSelected) {
       // Item is already selected, remove it from the selection
@@ -74,15 +45,17 @@ const FeatureCard2: React.FC = () => {
   <div
 
       className="2xl:max-w-[510px] xl:max-w-[510px] lg:max-w-[330px] md:max-w-[510px] sm:max-w-[330px] xs:max-w-[320px] 2xs:max-w-[310] grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2 2xs:grid-cols-1 gap-3">
-    {features.map((deal, index) => (
+    {featureProductData.map((deal, index) => (
+        <Link to={`/detail/${deal.id}`}>
+
         <div
             className={`${
-                index === features.length - 1 ? 'w-[336px]' : 'w-[160px]'
+                index === featureProductData.length - 1 ? 'w-[336px]' : 'w-[160px]'
             } hover:bg-gradient-to-r from-[#F6CEEC] to-[#D939cd] p-0.5 hover:rounded-2xl border border-[#eaecf0] rounded-xl`}
             key={index}
         >
         <div className={`flex flex-col justify-between items-center flex-grow-0 flex-shrink-0 h-72 relative overflow-hidden pb-3 rounded-xl bg-white ) ${   
-        index === features.length - 1 ? 'w-[330px] ' : 'w-[154px]'
+        index === featureProductData.length - 1 ? 'w-[330px] ' : 'w-[154px]'
         }`} >
           <div className="self-stretch flex-grow-0 flex-shrink-0 h-40 relative overflow-hidden bg-[#d0d5dd]">
 
@@ -102,7 +75,7 @@ const FeatureCard2: React.FC = () => {
                       onClick={() => handleImageClick(deal)}
                   />
               )}
-              <img src={deal.image} alt="Product" className="h-40 w-full left-[-1px] top-[-1px] object-cover" />
+              <img  src={`http://localhost:1337${deal.attributes.image.data.attributes.formats.thumbnail.url}`} alt="Product" className="h-40 w-full left-[-1px] top-[-1px] object-cover" />
             </div>
 
           </div>
@@ -110,20 +83,20 @@ const FeatureCard2: React.FC = () => {
             <div className="flex flex-col justify-start items-start flex-grow-0 flex-shrink-0">
               <div className="flex justify-start items-start flex-grow-0 flex-shrink-0 relative overflow-hidden">
                 <div className="line-clamp-1 text-xs font-medium text-left text-black">
-                  {deal.name}
+                  {deal.attributes.name}
                 </div>
 
               </div>
               <div className="flex justify-center items-start flex-grow-0 flex-shrink-0 relative">
                 <p className="flex-grow-0 flex-shrink-0 text-xs text-center text-[#870064]">Kshs.</p>
                 <p className="flex-grow-0 flex-shrink-0 text-xs font-medium text-left text-[#870064]">
-                  {deal.price}
+                  {deal.attributes.price}
                 </p>
               </div>
             </div>
             <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 gap-1">
               <div className="flex justify-start items-start flex-grow relative overflow-hidden rounded-lg bg-[#ffb8ec]">
-                <div className="bg-[#870064] h-1 rounded-full" style={{ width: `${deal.left}%` }}></div>
+                <div className="bg-[#870064] h-1 rounded-full" style={{ width: `${deal.attributes.leftItems}%` }}></div>
               </div>
               <div className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-1">
                 <div className="flex-grow-0 flex-shrink-0 w-4 h-4 relative overflow-hidden">
@@ -132,7 +105,7 @@ const FeatureCard2: React.FC = () => {
                       className="w-4 h-4 absolute left-[-0.52px] top-[-0.52px] object-cover"
                   />
                 </div>
-                <p className="flex-grow-0 flex-shrink-0 text-xs text-left text-[#870064]">{deal.left}</p>
+                <p className="flex-grow-0 flex-shrink-0 text-xs text-left text-[#870064]">{deal.attributes.leftItems}</p>
                 <p className="flex-grow-0 flex-shrink-0 text-xs text-center text-[#870064]"> Left</p>
               </div>
             </div>
@@ -195,7 +168,9 @@ const FeatureCard2: React.FC = () => {
           </div>
         </div>
       </div>
+        </Link>
 ))}
+
 </div>
 </>
   );

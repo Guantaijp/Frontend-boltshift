@@ -13,33 +13,29 @@ import {getProductAsyc} from '../../store/reducers/products.reducer.ts'
 
 
 function Detail() {
+
+  document.title = "Product Detail | Shop";
   const { id } = useParams();
     const dispatch = useDispatch();
-    const products = useSelector((state) => state.products.products);
+    const products = useSelector((state:any) => state.products.products);
 
     const fetchData = async () => {
-      const response = await dispatch(getProductAsyc());
+      const response = await dispatch(getProductAsyc() as any);
     }
 
     useEffect(() => {
       fetchData();
     }, []);
 
-    const selectedProduct = products.find((product) => product.id === Number(id));
-    console.log(selectedProduct);
+    const selectedProduct = products.find((product:any) => product.id === Number(id));
+
+document.title = "Product Detail | Shop";
 
 
   return (
 
     <>
       <Navbar />
-      {/*<div>*/}
-      {/*  <h1>Product Details</h1>*/}
-      {/*  <p>Name: {selectedProduct.attributes.name}</p>*/}
-      {/*  <p>Price: ${selectedProduct.price}</p>*/}
-      {/*  /!* Add more details as needed *!/*/}
-      {/*</div>*/}
-
       <div className="mx-8 max-w-[1248px] justify-center " >
         <div className="flex  flex-wrap justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden gap-3 py-2 ">
           <div className="flex justify-start items-start flex-grow-0 flex-shrink-0 relative">
