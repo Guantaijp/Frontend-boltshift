@@ -6,14 +6,19 @@ import eyeOff from '../../assets/eye-off.svg'
 import apple from "../../assets/sigup/Social button groups.svg"
 import  { useState } from 'react'
 import {Checkbox} from "../../../@/components/ui/checkbox.tsx";
+import { signUpAsyc } from "../../store/reducers/auth.reducer.ts";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { signupSchema} from "../../utils/validations.ts";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 function Signup() {
 
+    document.title = "BoltShift | Signup";
     const [password, setPassword] = useState("");
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(eyeOff);
-
-
     const handleToggle = () => {
         if (type === 'password') {
             setIcon(eye);
@@ -24,13 +29,39 @@ function Signup() {
         }
     }
 
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
+    const { handleSubmit, control, formState: { errors } } = useForm({
+        resolver: yupResolver(signupSchema)
+    });
+
+   const onSubmit = async (data:any) => {
+      setLoading(true);
+       try {
+           const sendData = {
+               user: {
+                   first_name:data.first_name,
+                   last_name:data.last_name,
+                   email: data.email,
+                   phone_number: data.phone_number,
+                   password: data.password,
+               }
+           }
+           await dispatch(signUpAsyc(sendData) as any);
+           navigate("/signin");
+       } catch (error) {
+         console.log(error)
+       }finally {
+           setLoading(false)
+       }
+   }
 
     return (
+
         <>
             <div className="flex  w-full h-screen  justify-between my-6">
-
-                {/* first */}
                 <div className=" w-1/2 signup h-screen flex flex-col rounded-3xl py-3 sm:hidden md:hidden xs:hidden 2xs:hidden ">
                     <div className="flex mt-auto flex-col justify-center items-center  p-20 bg-gradient-to-b from-black/0 to-black/40">
                         <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 relative gap-8 p-10 rounded-3xl bg-black/30 border-2 border-white/50 backdrop-blur-xl">
@@ -290,7 +321,9 @@ function Signup() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col justify-start items-center flex-grow-0 flex-shrink-0 w-96 gap-8 ">
+                        <form
+                            onSubmit={handleSubmit(onSubmit)}
+                            className="flex flex-col justify-start items-center flex-grow-0 flex-shrink-0 w-96 gap-8 ">
                             <div className="flex flex-col justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative gap-3">
                                 <p className="self-stretch flex-grow-0 flex-shrink-0 w-96 text-3xl font-semibold text-center text-[#101828]">
                                     Create an account
@@ -305,55 +338,90 @@ function Signup() {
                                     <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 gap-5">
                                         <div className="flex flex-col w-full justify-start items-start flex-grow relative gap-1.5">
                                             <label className="flex-grow-0  flex-shrink-0 text-xs font-medium text-left text-[#344054]">First Name</label>
+                                            <Controller
+                                                name="first_name"
+                                                control={control}
+                                                render={({ field }) => (
                                             <input
+                                                {...field}
                                                 className="put appearance-none w-full  border border-[#d0d5dd] rounded-md py-2 px-3 text-black  focus:outline-none "
                                                 id="inputField"
                                                 type="text"
                                                 placeholder="Enter your First Name"
                                             />
+                                            )}
+                                            />
+
                                         </div>
                                         <div className="flex flex-col w-full justify-start items-start flex-grow relative gap-1.5">
                                             <label className="flex-grow-0  flex-shrink-0 text-xs font-medium text-left text-[#344054]">Last Name</label>
+                                            <Controller
+                                                name="last_name"
+                                                control={control}
+                                                render={({ field }) => (
                                             <input
+                                                {...field}
                                                 className="put appearance-none w-full  border border-[#d0d5dd] rounded-md py-2 px-3 text-black  focus:outline-none "
                                                 id="inputField"
                                                 type="text"
                                                 placeholder="Enter your Last Name"
                                             />
+                                            )}
+                                                />
+
                                         </div>
 
                                         <div className="flex flex-col w-full justify-start items-start flex-grow relative gap-1.5">
                                             <label className="flex-grow-0  flex-shrink-0 text-xs font-medium text-left text-[#344054]">Email</label>
+                                            <Controller
+                                                name="email"
+                                                control={control}
+                                                render={({ field }) => (
                                             <input
+                                                {...field}
                                                 className="put appearance-none w-full  border border-[#d0d5dd] rounded-md py-2 px-3 text-black  focus:outline-none "
                                                 id="inputField"
                                                 type="email"
                                                 placeholder="Enter your Email Address"
                                             />
+                                            )}
+                                                />
                                         </div>
 
                                         <div className="flex flex-col w-full justify-start items-start flex-grow relative gap-1.5">
                                             <label className="flex-grow-0  flex-shrink-0 text-xs font-medium text-left text-[#344054]">Phone Number</label>
-                                            <input
+                                            <Controller
+                                                name="phone_number"
+                                                control={control}
+                                                render={({ field }) => (
+                                               <input
+                                                {...field}
                                                 className="put appearance-none w-full  border border-[#d0d5dd] rounded-md py-2 px-3 text-black  focus:outline-none "
                                                 id="inputField"
                                                 type="text"
                                                 placeholder="Enter your Phone Number"
                                             />
+                                            )}
+                                                />
                                         </div>
 
                                         <div className="flex flex-col w-full justify-start items-start flex-grow relative gap-1.5">
                                             <label className="flex-grow-0  flex-shrink-0 text-xs font-medium text-left text-[#344054]">Password</label>
                                             <div className="relative w-full">
-                                                <input
+                                                <Controller
+                                                    name="password"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                   <input
+                                                    {...field}
                                                     className="put appearance-none w-full border border-[#d0d5dd] rounded-md py-2 px-3 text-black pr-8 focus:outline-none"
                                                     type={type}
-                                                    name="confirm"
                                                     placeholder="Password"
-                                                    value={password}
-                                                    onChange={(e) => setPassword(e.target.value)}
-                                                    autoComplete="current-password"
+                                                    // value={password}
+                                                    // onChange={(e) => setPassword(e.target.value)}
                                                 />
+                                                )}
+                                                    />
                                                 <span className="absolute top-1/2 transform -translate-y-1/2 right-2 cursor-pointer" onClick={handleToggle}>
                                                     <img src={icon} alt="icon" />
                                                 </span>
@@ -389,14 +457,15 @@ function Signup() {
 
 
                                 <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 gap-4">
-                                    <div
+                                    <button
+                                        type="submit"
                                         className="flex justify-center items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden gap-2 px-[18px] py-2.5 rounded-lg bg-[#66004b] border border-[#66004b]"
                                         style={{ boxShadow: "0px 1px 2px 0 rgba(16,24,40,0.05)" }}
                                     >
                                         <p className="flex-grow-0 flex-shrink-0 text-base font-semibold text-left text-white">
                                             Get Started
                                         </p>
-                                    </div>
+                                    </button>
                                     <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative gap-2">
                                         <div className="flex-grow h-px bg-[#eaecf0]" />
                                         <p className="flex-grow-0 flex-shrink-0 text-sm font-medium text-center text-[#475467]">
@@ -426,9 +495,9 @@ function Signup() {
                                     <p className="flex-grow-0 flex-shrink-0 text-sm font-semibold text-left text-[#4d0039]">
                                         Log in
                                     </p>
-                                </div>
+                                </div >
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
 

@@ -1,5 +1,6 @@
 import { combineReducers , configureStore} from '@reduxjs/toolkit'
 import ProductSlice from './slices/product.slice'
+import AuthSlice from './slices/auth.slice'
 
 const loadState = () => {
     try {
@@ -17,6 +18,7 @@ const persistedState = loadState()
 
 const rootReducer = combineReducers({
     products: ProductSlice,
+    auth: AuthSlice,
 })
 
 export const store = configureStore({
