@@ -18,7 +18,7 @@ const FeatureCard2: React.FC = () => {
 
   const fetchData = async () => {
     const response = await dispatch(getProductAsyc() as any);
-    console.log(response)
+    console.log("data is",response.data.data)
   }
 
   useEffect(() => {

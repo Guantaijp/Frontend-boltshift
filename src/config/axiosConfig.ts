@@ -1,23 +1,16 @@
 import apiEndpoint from './enviroment.ts';
 import axios from 'axios';
-import store from '../store/index.ts';
+// import store from '../store/index.ts';
 
 
-const axiosClient = axios.create();
+const axiosClient = axios.create({
 
-const authHeader = (config: any) => {
-    const state = store.getState();
-    const token = state.auth.token;
-    config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
+    baseURL: apiEndpoint,
+    headers: {
         'Content-Type': 'application/json',
-    };
-    return config;
-}
-axiosClient.defaults.baseURL = apiEndpoint;
-axiosClient.interceptors.request.use(authHeader);
+        'Accept': 'application/json',
+    },
+});
 
 axiosClient.interceptors.request.use(
     (response) => {
