@@ -21,6 +21,7 @@ function Detail() {
 
     const fetchData = async () => {
       const response = await dispatch(getProductAsyc() as any);
+      console.log(response)
     }
 
     useEffect(() => {

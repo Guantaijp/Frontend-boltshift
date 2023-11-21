@@ -7,8 +7,8 @@ import apple from "../../assets/sigup/Social button groups.svg"
 import  { useState } from 'react'
 import {Checkbox} from "../../../@/components/ui/checkbox.tsx";
 import { signUpAsyc } from "../../store/reducers/auth.reducer.ts";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {  useNavigate } from "react-router-dom";
 import { signupSchema} from "../../utils/validations.ts";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,7 +16,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 function Signup() {
 
     document.title = "BoltShift | Signup";
-    const [password, setPassword] = useState("");
+    // const [password, setPassword] = useState("");
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(eyeOff);
     const handleToggle = () => {
@@ -29,11 +29,11 @@ function Signup() {
         }
     }
 
-    const [loading, setLoading] = useState(false);
+    const [, setLoading] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { handleSubmit, control, formState: { errors } } = useForm({
+    const { handleSubmit, control } = useForm({
         resolver: yupResolver(signupSchema)
     });
 

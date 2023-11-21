@@ -30,12 +30,13 @@ const HotedealCard: React.FC = () => {
 
   const [selectedItems, setSelectedItems] = useState([]);
   const handleImageClick = (deal:any) => {
-    const isItemSelected = selectedItems.some((item) => item.id === deal.id);
+    const isItemSelected = selectedItems.some((item) => item === deal.id);
     if (isItemSelected) {
       // Item is already selected, remove it from the selection
-      setSelectedItems(selectedItems.filter((item) => item.id !== deal.id));
+      setSelectedItems(selectedItems.filter((item) => item !== deal.id));
     } else {
       // Item is not selected, add it to the selection
+      // @ts-ignore
       setSelectedItems([...selectedItems, deal]);
     }
   };
@@ -50,7 +51,7 @@ const HotedealCard: React.FC = () => {
             <div className="self-stretch flex-grow-0 rounded-tr-xl rounded-tl-xl flex-shrink-0 h-40 relative overflow-hidden bg-[#d0d5dd]">
 
               <div className=" relative m-0 p-0">
-                {selectedItems.some((item) => item.id === deal.id) ? (
+                {selectedItems.some((item) => item === deal.id) ? (
                   <img
                     src={Selected}
                     alt="Selected"

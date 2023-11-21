@@ -18,7 +18,9 @@ const FeatureCard2: React.FC = () => {
 
   const fetchData = async () => {
     const response = await dispatch(getProductAsyc() as any);
+    console.log(response)
   }
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -30,12 +32,13 @@ const FeatureCard2: React.FC = () => {
 
   const [selectedItems, setSelectedItems] = useState([]);
   const handleImageClick = (deal:any) => {
-    const isItemSelected = selectedItems.some((item) => item.id === deal.id);
+    const isItemSelected = selectedItems.some((item) => item === deal.id);
     if (isItemSelected) {
       // Item is already selected, remove it from the selection
-      setSelectedItems(selectedItems.filter((item) => item.id !== deal.id));
+      setSelectedItems(selectedItems.filter((item) => item !== deal.id));
     } else {
       // Item is not selected, add it to the selection
+      // @ts-ignore
       setSelectedItems([...selectedItems, deal]);
     }
   };
@@ -45,7 +48,7 @@ const FeatureCard2: React.FC = () => {
   <div
 
       className="2xl:max-w-[510px] xl:max-w-[510px] lg:max-w-[330px] md:max-w-[510px] sm:max-w-[330px] xs:max-w-[320px] 2xs:max-w-[310] grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2 2xs:grid-cols-1 gap-3">
-    {featureProductData.map((deal, index) => (
+    {featureProductData.map((deal: { id: any; attributes: { image: { data: { attributes: { formats: { thumbnail: { url: any; }; }; }; }; }; name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; price: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; leftItems: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }; }, index: React.Key | null | undefined) => (
         <Link to={`/detail/${deal.id}`}>
 
         <div
@@ -60,7 +63,7 @@ const FeatureCard2: React.FC = () => {
           <div className="self-stretch flex-grow-0 flex-shrink-0 h-40 relative overflow-hidden bg-[#d0d5dd]">
 
             <div className=" relative m-0 p-0">
-              {selectedItems.some((item) => item.id === deal.id) ? (
+              {selectedItems.some((item) => item === deal.id) ? (
                   <img
                       src={Selected}
                       alt="Selected"

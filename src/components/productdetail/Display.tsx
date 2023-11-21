@@ -1,4 +1,3 @@
-import table from "../../assets/Tabledetail.png";
 import plus from "../../assets/plus.svg"
 import minus from "../../assets/minus.svg"
 import shopping from "../../assets/shopping-cart-03.svg"
@@ -12,29 +11,34 @@ import Compare from "./Compare";
 import Sliders from "./Sliders"
 
 
-interface Product {
-  id: number;
-  name: string;
-  image: string;
-  price: number;
-  left: number;
-  rating: number;
+// interface Product {
+//   id: number;
+//   name: string;
+//   image: string;
+//   price: number;
+//   left: number;
+//   rating: number;
+// }
+
+// @ts-ignore
+interface DisplayProps {
+  product: any
 }
 
-const Display: React.FC = ({product}) => {
+const Display: React.FC<DisplayProps> = ({ product, }) => {
 
-
-  const products: Product[] = [
-    {
-      id: 1,
-      name:
-        'Mercer41 Annemargaret 90.5" Round Arm Sofa Polyester/Polyester Blend in Blue, Size 34.5 H x 90.5 W x 35.5 D in | Wayfair',
-      image: table,
-      price: 92372.97,
-      rating: 4.5,
-      left: 25,
-    },
-  ];
+  //
+  // const products: Product[] = [
+  //   {
+  //     id: 1,
+  //     name:
+  //       'Mercer41 Annemargaret 90.5" Round Arm Sofa Polyester/Polyester Blend in Blue, Size 34.5 H x 90.5 W x 35.5 D in | Wayfair',
+  //     image: table,
+  //     price: 92372.97,
+  //     rating: 4.5,
+  //     left: 25,
+  //   },
+  // ];
 
   // const product = products[0]; // Assuming you have only one item in the products array
 
