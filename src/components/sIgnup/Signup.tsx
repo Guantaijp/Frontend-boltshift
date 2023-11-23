@@ -16,7 +16,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 function Signup() {
 
     document.title = "BoltShift | Signup";
-    // const [password, setPassword] = useState("");
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(eyeOff);
     const handleToggle = () => {
