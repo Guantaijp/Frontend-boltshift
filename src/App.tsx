@@ -13,6 +13,7 @@ import Payment from './components/Profile/Payment.tsx'
 import  Voucher  from './components/Profile/Voucher.tsx'
 import Orders from './components/Profile/Orders.tsx'
 import AccountDetails from './components/Profile/AccountDetails.tsx'
+import PrivateRoute from "./routes/PrivateRoute.ts";
 function App() {
 
 
@@ -35,10 +36,10 @@ function App() {
                         <Route path="/shopping" element={[<Shopping />,]} />
                         <Route path="/wishlist" element={[<WishList />,]} />
                         <Route path="/checkout" element={[<CheckOut />,]} />
-                        <Route path="/account/profile" element={[<AccountDetails />,]} />
-                        <Route path="/account/orders" element={[<Orders />,]} />
-                        <Route path="/account/payment" element={[<Payment />,]} />
-                        <Route path="/account/voucher" element={[<Voucher />,]} />
+                        <Route path="/account/profile" element={<PrivateRoute><AccountDetails /></PrivateRoute>}/>
+                        <Route path="/account/orders" element={<PrivateRoute><Orders /></PrivateRoute>}/>
+                        <Route path="/account/payment" element={<PrivateRoute><Payment /></PrivateRoute>}/>
+                        <Route path="/account/voucher" element={<PrivateRoute><Voucher /></PrivateRoute>}/>
                         <Route path="*" element={[<NotFound />,]} />
                     </Routes>
                   </Router> 
