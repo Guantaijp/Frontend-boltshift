@@ -1,11 +1,18 @@
 import { postRequest, putRequest,getRequest } from "../../config/axiosConfig";
-import { setToken} from "../slices/auth.slice.ts";
+import { setToken,setUser} from "../slices/auth.slice.ts";
 
-export function signInAsyc(data: any){
-    return async (dispatch:any, _getState:any) => {
-        const res = await postRequest('auth/local/register',data)
-        dispatch(setToken(res?.status?.user_token))
-    }
+export function signInAsyc(data: any) {
+    return async (dispatch: any, _getState: any) => {
+        try {
+            const res = await postRequest('auth/local', data)
+            dispatch(setToken(res.jwt))
+            dispatch(setUser(res.user))
+            return res
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    };
 }
 
 export function signUpAsyc(data: any){

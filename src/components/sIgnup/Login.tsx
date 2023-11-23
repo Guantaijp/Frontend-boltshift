@@ -14,12 +14,16 @@ import avatar2 from "../../assets/sigup/Avatar (2).png"
 import avatar3 from "../../assets/sigup/Avatar (3).png"
 import avatar4 from "../../assets/sigup/Avatar (4).png"
 import row from "../../assets/sigup/Row.svg"
-
-
+import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {signInSchema} from "../../utils/validations.ts";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {signInAsyc} from "../../store/reducers/auth.reducer.ts";
 function Login() {
 
-
-    const [password, setPassword] = useState("");
+    document.title = "BoltShift | Sign In";
+    // const [password, setPassword] = useState("");
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(eyeOff);
 
@@ -30,6 +34,32 @@ function Login() {
         } else {
             setIcon(eyeOff)
             setType('password')
+        }
+    }
+
+    const [, setLoading] = useState(false);
+    const navigate = useNavigate()
+    const dispatch = useDispatch();
+
+    const { handleSubmit, control } = useForm({
+        resolver: yupResolver(signInSchema)
+    });
+
+    const onSubmit = async (data:any) => {
+        setLoading(true);
+        try {
+            const sendData = {
+                identifier: data.email,
+                password: data.password,
+            }
+            const response = await dispatch(signInAsyc(sendData) as any);
+            const token = response.jwt;
+            localStorage.setItem("token", token);
+            navigate("/");
+        } catch (error) {
+            console.log(error)
+        }finally {
+            setLoading(false)
         }
     }
 
@@ -87,7 +117,7 @@ function Login() {
                 {/* second */}
 
 
-                <div className="flex flex-col justify-center items-center self-stretch flex-grow mx-auto p-4 sm:p-0">
+                <form  onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center self-stretch flex-grow mx-auto p-4 sm:p-0">
                     <div className="flex flex-col justify-center items-center gap-8 w-full max-w-md">
                         <div className="flex flex-col justify-start items-center self-stretch gap-6 w-full">
                             <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2">
@@ -106,25 +136,40 @@ function Login() {
                             <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 gap-5">
                                 <div className="flex flex-col w-full justify-start items-start flex-grow relative gap-1.5">
                                     <label className="flex-grow-0  flex-shrink-0 text-xs font-medium text-left text-[#344054]">Email</label>
+                                    <Controller
+                                        name="email"
+                                        control={control}
+                                        render={({ field }) => (
                                     <input
+                                        {...field}
                                         className="put appearance-none w-full  border border-[#d0d5dd] rounded-md py-2 px-3 text-black  focus:outline-none "
                                         id="inputField"
                                         type="email"
                                         placeholder="Enter your email address"
+                                    />
+                                        )}
                                     />
                                 </div>
 
                                 <div className="flex flex-col w-full justify-start items-start flex-grow relative gap-1.5">
                                     <label className="flex-grow-0  flex-shrink-0 text-xs font-medium text-left text-[#344054]">Password</label>
                                     <div className="relative w-full">
+                                        <Controller
+                                            name="password"
+                                            control={control}
+                                            render={({ field }) => (
                                         <input
+                                            {...field}
                                             className="put appearance-none w-full border border-[#d0d5dd] rounded-md py-2 px-3 text-black pr-8 focus:outline-none"
                                             type={type}
-                                            name="confirm"
+                                            name="password"
                                             placeholder="Password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
+                                            // value={password}
+                                            // onChange={(e) => setPassword(e.target.value)}
                                             autoComplete="current-password"
+                                        />
+                                            )}
+
                                         />
                                         <span className="absolute top-1/2 transform -translate-y-1/2 right-2 cursor-pointer" onClick={handleToggle}>
                                              <img src={icon} alt="icon" />
@@ -157,14 +202,15 @@ function Login() {
                                 </div>
                             </div>
                             <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 gap-4">
-                                <div
+                                <button
+                                    type="submit"
                                     className="flex justify-center items-center self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden gap-2 px-[18px] py-2.5 rounded-lg bg-[#66004b] border border-[#66004b]"
                                     style={{ boxShadow: "0px 1px 2px 0 rgba(16,24,40,0.05)" }}
                                 >
                                     <p className="flex-grow-0 flex-shrink-0 text-base font-semibold text-left text-white">
                                         Sign in
                                     </p>
-                                </div>
+                                </button>
                                 <div className="flex justify-start items-start self-stretch flex-grow-0 flex-shrink-0 gap-4">
                                     <div className="flex justify-center items-center flex-grow gap-3">
                                         < img src={apple} alt="google" />
@@ -186,7 +232,7 @@ function Login() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </>
   )

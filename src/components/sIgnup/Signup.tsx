@@ -40,21 +40,22 @@ function Signup() {
       setLoading(true);
        try {
            const sendData = {
-               user: {
                    first_name:data.first_name,
                    last_name:data.last_name,
                    email: data.email,
                    phone_number: data.phone_number,
                    password: data.password,
-               }
+                   username:data.username
            }
            await dispatch(signUpAsyc(sendData) as any);
-           navigate("/signin");
+           navigate("/login");
+           console.log("Formdata", "signup successful")
        } catch (error) {
          console.log(error)
        }finally {
            setLoading(false)
        }
+       console.log("Formdata", data)
    }
 
     return (
@@ -335,6 +336,24 @@ function Signup() {
                                 <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 gap-5">
 
                                     <div className="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 gap-5">
+                                        <div className="flex flex-col w-full justify-start items-start flex-grow relative gap-1.5">
+                                            <label className="flex-grow-0  flex-shrink-0 text-xs font-medium text-left text-[#344054]">User Name</label>
+                                            <Controller
+                                                name="username"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <input
+                                                        {...field}
+                                                        className="put appearance-none w-full  border border-[#d0d5dd] rounded-md py-2 px-3 text-black  focus:outline-none "
+                                                        id="inputField"
+                                                        type="text"
+                                                        placeholder="Enter your First Name"
+                                                    />
+                                                )}
+                                            />
+
+                                        </div>
+
                                         <div className="flex flex-col w-full justify-start items-start flex-grow relative gap-1.5">
                                             <label className="flex-grow-0  flex-shrink-0 text-xs font-medium text-left text-[#344054]">First Name</label>
                                             <Controller
