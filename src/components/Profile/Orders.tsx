@@ -5,10 +5,13 @@ import Navbar from '../Navbar.tsx'
 import gear from '../../assets/profile/Gear.svg'
 import AccountLayout from './AccountLayout.tsx'
 import Footer from '../Footer.tsx'
+import {useEffect} from "react";
 
 
-function Orders() {
-
+function Orders({profileData,getProfileData}:any) {
+    useEffect(() => {
+        getProfileData();
+    }, []);
 
     return (
    <>
@@ -92,7 +95,7 @@ function Orders() {
         </div>
 
         <div className="flex">
-            <AccountLayout />
+            <AccountLayout profileData={profileData} />
             <div>
                 <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 bg-white">
           <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2">

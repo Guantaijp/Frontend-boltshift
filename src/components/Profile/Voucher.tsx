@@ -10,7 +10,7 @@ import gear from '../../assets/profile/Gear.svg'
 import AccountLayout from './AccountLayout.tsx'
 import Footer from '../Footer.tsx'
 import PopVoch from "./PopVoch.tsx";
-
+import {useEffect} from "react";
 interface Vouchers {
   id: number,
   image: string,
@@ -21,7 +21,11 @@ interface Vouchers {
   category: string,
 }
 
-export default function Voucher() {
+export default function Voucher({ profileData ,getProfileData}: any) {
+
+  useEffect(() => {
+     getProfileData();
+  }, []);
 
   const vouchers: Vouchers[] = [
     {
@@ -172,7 +176,7 @@ export default function Voucher() {
           </div>
         </div>
         <div className="flex">
-          <AccountLayout />
+          <AccountLayout profileData={ profileData} />
           <div className="mx-8 xs:mx-4 justify-center items-start flex-grow relative gap-12">
 
           {/*<div className="mx-8 xs:mx-0 sm:mx-0">*/}

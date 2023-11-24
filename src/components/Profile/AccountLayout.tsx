@@ -8,12 +8,41 @@ import receipt1 from '../../assets/profile/receipt-check1.svg'
 import receipt from '../../assets/profile/receipt-check.svg'
 import { Link, useLocation } from 'react-router-dom'
 import userPhoto from '../../assets/Avatar.svg'
-function AccountLayout() {
+import {ChangeEvent, useEffect, useState} from 'react';
+function AccountLayout({profileData}:any) {
+
     const location = useLocation();
     const isProfilePage = location.pathname === '/account/profile';
     const isOrderPage = location.pathname === '/account/orders';
     const isPaymentPage = location.pathname === '/account/payment';
     const isvoucherPage = location.pathname === '/account/voucher';
+
+    const [image, setImage] = useState<File | null>(null);
+    const handleImageUrlChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            setImage(event.target.files[0]);
+        }
+    };
+
+    useEffect(() => {
+        if (image) {
+            const imageUrl:any = typeof image === 'string' ? image : URL.createObjectURL(image);
+            setImage(imageUrl);
+        } else if (typeof profileData?.profile_picture === 'string') {
+            setImage(null);
+        } else if (profileData?.profile_picture instanceof File) {
+            const imageUrl:any = URL.createObjectURL(profileData.profile_picture);
+            setImage(imageUrl);
+        } else {
+            setImage(null);
+        }
+        return () => {
+            if (typeof image === 'string') {
+                URL.revokeObjectURL(image);
+            }
+        };
+    }, [image, profileData?.profile_picture]);
+
 
 
     return (
@@ -25,41 +54,61 @@ function AccountLayout() {
                         <PopNav />
                     </div>
                     <div className="flex flex-col justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative gap-4 px-6">
+
                         <div className="flex-grow-0 flex-shrink-0 w-24 h-24 relative rounded-[200px]">
-                           
-                                <img
+                            <div className="relative">
+                                {image ? (
+                                    <img
+                                        src={typeof image === 'string' ? image : URL.createObjectURL(image)}
+                                        alt="User Photo"
+                                        className="w-24 h-24 absolute left-0 top-0 overflow-hidden rounded-full bg-cover bg-no-repeat bg-center border-4 border-white"
+                                    />
+                                ) : (
+                                    <img
                                     src={userPhoto}
                                     alt="User Photo"
-                                   className='w-24 h-24 absolute left-0 top-0 overflow-hidden rounded-full bg-cover bg-no-repeat bg-center border-4 border-white'
+                                    className="w-24 h-24 absolute left-0 top-0 overflow-hidden rounded-full bg-cover bg-no-repeat bg-center border-4 border-white"
                                 />
-                           
-                            <div className="flex justify-center items-center absolute left-[66px] top-[66px] gap-2.5 p-2 rounded-2xl bg-white">
-                                <svg
-                                    width={16}
-                                    height={16}
-                                    viewBox="0 0 16 16"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="flex-grow-0 flex-shrink-0 w-4 h-4 relative"
-                                    preserveAspectRatio="xMidYMid meet"
-                                >
-                                    <path
-                                        d="M14.6663 7.66659V9.73325C14.6663 11.2267 14.6663 11.9735 14.3757 12.5439C14.12 13.0457 13.7121 13.4536 13.2103 13.7093C12.6399 13.9999 11.8931 13.9999 10.3997 13.9999H5.59967C4.1062 13.9999 3.35946 13.9999 2.78903 13.7093C2.28727 13.4536 1.87932 13.0457 1.62366 12.5439C1.33301 11.9735 1.33301 11.2267 1.33301 9.73325V6.26659C1.33301 4.77311 1.33301 4.02638 1.62366 3.45594C1.87932 2.95418 2.28727 2.54623 2.78903 2.29057C3.35946 1.99992 4.1062 1.99992 5.59968 1.99992H8.33301M12.6663 5.33325V1.33325M10.6663 3.33325H14.6663M10.6663 7.99992C10.6663 9.47268 9.47243 10.6666 7.99968 10.6666C6.52692 10.6666 5.33301 9.47268 5.33301 7.99992C5.33301 6.52716 6.52692 5.33325 7.99968 5.33325C9.47243 5.33325 10.6663 6.52716 10.6663 7.99992Z"
-                                        stroke="#0C111D"
-                                        stroke-width="1.6"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg>
+                                )}
+                                <div className="flex justify-center items-center absolute left-[66px] top-[66px] gap-2.5 p-2 rounded-2xl bg-white">
+                                    <div className="relative">
+                                        <svg
+                                            width={16}
+                                            height={16}
+                                            viewBox="0 0 16 16"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="flex-grow-0 flex-shrink-0 w-4 h-4 relative cursor-pointer"
+                                            preserveAspectRatio="xMidYMid meet"
+                                        >
+                                            <path
+                                                d="M14.6663 7.66659V9.73325C14.6663 11.2267 14.6663 11.9735 14.3757 12.5439C14.12 13.0457 13.7121 13.4536 13.2103 13.7093C12.6399 13.9999 11.8931 13.9999 10.3997 13.9999H5.59967C4.1062 13.9999 3.35946 13.9999 2.78903 13.7093C2.28727 13.4536 1.87932 13.0457 1.62366 12.5439C1.33301 11.9735 1.33301 11.2267 1.33301 9.73325V6.26659C1.33301 4.77311 1.33301 4.02638 1.62366 3.45594C1.87932 2.95418 2.28727 2.54623 2.78903 2.29057C3.35946 1.99992 4.1062 1.99992 5.59968 1.99992H8.33301M12.6663 5.33325V1.33325M10.6663 3.33325H14.6663M10.6663 7.99992C10.6663 9.47268 9.47243 10.6666 7.99968 10.6666C6.52692 10.6666 5.33301 9.47268 5.33301 7.99992C5.33301 6.52716 6.52692 5.33325 7.99968 5.33325C9.47243 5.33325 10.6663 6.52716 10.6663 7.99992Z"
+                                                stroke="#0C111D"
+                                                stroke-width="1.6"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="absolute left-0 top-0 opacity-0"
+                                                onChange={handleImageUrlChange}
+                                            />
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
                         <div className="flex flex-col justify-start items-center self-stretch flex-grow-0 flex-shrink-0 gap-2">
                             <div className="flex flex-col justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative">
                                 <p className="flex-grow-0 flex-shrink-0 text-lg font-semibold text-center text-[#101828]">
-                                    Paul Mbingu
+                                    {profileData?.first_name} {profileData?.last_name}
                                 </p>
                                 <p className="self-stretch flex-grow-0 flex-shrink-0 w-72 text-sm text-center text-[#475467]">
-                                    paul@excite.company
+                                    {profileData?.email}
                                 </p>
                             </div>
                         </div>

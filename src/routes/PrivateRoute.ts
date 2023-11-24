@@ -8,9 +8,7 @@ interface PrivateRouteProps {
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     const navigate = useNavigate();
-
     const token = useSelector((state: any) => state.auth?.jwt);
-
     useEffect(() => {
         if (!token) {
             navigate('/login');
