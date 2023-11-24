@@ -1,21 +1,15 @@
-import { SetStateAction, useRef, useState} from 'react';
 
-function DatePickerDemo() {
+function DatePickerDemo({handleBirthdayChange,birthday, setBirthday} :any ) {
 
-    const [date, setDate] = useState('');
-    const dateInputRef = useRef(null);
-
-    const handleChange = (e: { target: { value: SetStateAction<string>; }; }) => {
-    setDate(e .target.value);
-  };
 
   return (
     <div className="relative w-full">
       <input
         type='date'
-        onChange={handleChange}
-        ref={dateInputRef}
-        value={date}
+        onChange={ (e) => {
+            setBirthday(e.target.value);
+            handleBirthdayChange(e.target.value);}}
+        value={birthday}
         datepicker-autohide
         className="put border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-none block w-full p-2.5 outline-none"
         placeholder="Select date"

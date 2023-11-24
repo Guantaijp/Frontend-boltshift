@@ -1,8 +1,4 @@
-import { useState } from 'react'
-// import apple from '../../assets/checkout/Social button (1).svg'
-// import facebook from '../../assets/checkout/Social button (2).svg'
-// import email from '../../assets/checkout/Social button (3).svg'
-// import google from '../../assets/checkout/Social button.svg'
+import  {useEffect, useRef, useState} from 'react'
 import detail from '../../assets/profile/file-02.svg'
 import address from '../../assets/profile/marker-pin-01.svg'
 import SelectDemo from './SelectDemo';
@@ -18,11 +14,46 @@ import social from '../../assets/checkout/Social button.svg'
 import social2 from '../../assets/checkout/Social button (1).svg'
 import social3 from '../../assets/checkout/Social button (2).svg'
 import social4 from '../../assets/checkout/Social button (3).svg'
+import {useDispatch} from "react-redux";
+import {updateUserProfileAsyc} from "../../store/reducers/auth.reducer.ts";
 
 
+function AccountDetails( { profileData,getProfileData }:any) {
+  document.title = "BoltShift | Account Details"
+  useEffect(() => {
+    getProfileData();
+  }, []);
 
+  const [, setLoading] = useState(false);
+  const formRef = useRef(null);
+  const dispatch = useDispatch();
 
-function AccountDetails() {
+  const handleUpdateProfile = async (e: any) => {
+    e.preventDefault();
+    try {
+      const sendData = {
+        id: profileData?.id,
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            phone_number: phoneNumber,
+            birthday: birthday,
+            gender:gender,
+            apartment_details: apartmentDetails,
+            street_address: streetAddress,
+            country: country,
+            city: city,
+           postal_code: postalCode,
+      }
+      setLoading(true);
+      const response = await dispatch(updateUserProfileAsyc(sendData) as any);
+      setLoading(false);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  }
 
   const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
@@ -36,7 +67,6 @@ function AccountDetails() {
 
   const [oldType, setOldType] = useState("password");
   const [oldIcon, setOldIcon] = useState(eyeOff);
-
   const handleToggle = () => {
     if (type === 'password') {
       setIcon(eye);
@@ -46,7 +76,6 @@ function AccountDetails() {
       setType('password')
     }
   }
-
   const handleToggleConfirm = () => {
     if (confirmType === "password") {
       setConfirmIcon(eye);
@@ -65,6 +94,59 @@ function AccountDetails() {
       setOldType("password");
     }
   }
+
+  // Basic details
+  const [firstName, setFirstName] = useState(profileData?.first_name || '');
+  const [lastName, setLastName] = useState(profileData?.last_name || '');
+  const [email, setEmail] = useState(profileData?.email || '');
+  const [phoneNumber, setPhoneNumber] = useState(profileData?.phone_number || '');
+  const [birthday, setBirthday] = useState(profileData?.birthday || '');
+  const [gender, setGender] =useState(profileData?.gender || '');
+  // //Address details
+  const[apartmentDetails, setApartmentDetails] = useState(profileData?.apartment_details || '');
+  const [streetAddress, setStreetAddress] = useState(profileData?.street_address || '');
+  const [country, setCountry] = useState(profileData?.country || '');
+  const [city, setCity] = useState(profileData?.city || '');
+  const [postalCode, setPostalCode] = useState(profileData?.postal_code || '');
+  // //Password
+  //   const [oldPassword, setOldPassword] = useState(profileData?.password || "");
+  //   const [password, setPassword] = useState("");
+  //   const [confirmPassword, setConfirm] = useState("");
+
+  useEffect(() => {
+    if(profileData) {
+      setFirstName(profileData?.first_name || '');
+      setLastName(profileData?.last_name || '');
+      setEmail(profileData?.email || '');
+      setPhoneNumber(profileData?.phone_number || '');
+      setBirthday(profileData?.birthday || '');
+      setGender(profileData?.gender || '');
+      setApartmentDetails(profileData?.apartment_details || '');
+      setStreetAddress(profileData?.street_address || '');
+      setCountry(profileData?.country || '');
+      setCity(profileData?.city || '');
+      setPostalCode(profileData?.postal_code || '');
+
+    }
+  }, [profileData]);
+
+  //basic details
+  const handleFirstNameChange = (e: any) => {setFirstName(e.target.value);}
+    const handleLastNameChange = (e: any) => {setLastName(e.target.value);}
+    const handleEmailChange = (e: any) => {setEmail(e.target.value);}
+    const handlePhoneNumberChange = (e: any) => {setPhoneNumber(e.target.value);}
+    const handleBirthdayChange = (e: any) => {setBirthday(e.target.value);}
+    const handleGenderChange = (e: any) => {setGender(e.target.value);}
+    //address details
+    const handleApartmentDetailsChange = (e: any) => {setApartmentDetails(e.target.value);}
+    const handleStreetAddressChange = (e: any) => {setStreetAddress(e.target.value);}
+    const handleCountryChange = (e: any) => {setCountry(e.target.value);}
+    const handleCityChange = (e: any) => {setCity(e.target.value);}
+    const handlePostalCodeChange = (e: any) => {setPostalCode(e.target.value);}
+    //password
+    // const handleOldPasswordChange = (e: any) => {setOldPassword(e.target.value);}
+    // const handlePasswordChange = (e: any) => {setPassword(e.target.value);}
+    // const handleConfirmPasswordChange = (e: any) => {setConfirm(e.target.value);}
 
 
 
@@ -150,7 +232,7 @@ function AccountDetails() {
           </div>
         </div>
         <div className=" flex">
-          <AccountLayout />
+          <AccountLayout  profileData={ profileData}/>
       <div className=" xs:mx-4 justify-center items-start flex-grow relative gap-12">
         <div className="flex flex-col justify-center items-start self-stretch flex-grow-0 flex-shrink-0 gap-8 py-4">
           <div className="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 bg-white">
@@ -163,7 +245,7 @@ function AccountDetails() {
             </div>
           </div>
 
-          <div className="  gap-10 py-2 bg-white">
+          <div className="  gap-10 py-2">
             <div className=" flex flex-col justify-center items-start flex-grow relative gap-4">
               <p className="flex-grow-0 flex-shrink-0 text-sm font-semibold text-center text-black">
                 Sign in with:
@@ -177,31 +259,31 @@ function AccountDetails() {
             </div>
           </div>
 
-          <div className="">
+          <div ref={formRef}  className="">
           <div className="sm:my-2 my-4 flex  md:flex-wrap sm:flex-wrap xs:flex-col sm:flex-col md:flex-col   gap-4 ">
             <div className="2xl:w-[416px] xl:w-[350px] lg:w-[250px] md:w-[350px] sm:w-[336px] xs:w-[336px] flex flex-col gap-1.5">
-            <TextInput label="First Name" placeholder="First Name" type="text" />
+            <TextInput label="First Name" placeholder="First Name" type="text" value={firstName} onChange={handleFirstNameChange}/>
             </div>
             <div className="2xl:w-[416px] xl:w-[350px]  lg:w-[250px] md:w-[350px] sm:w-[336px] xs:w-[336px] flex flex-col gap-1.5">
-              <TextInput label="Last Name" placeholder="Last Name" type="text" />
+              <TextInput label="Last Name" placeholder="Last Name" type="text" value={lastName} onChange={handleLastNameChange}/>
             </div>
           </div>
           <div className="sm:my-2 my-4 flex  md:flex-wrap sm:flex-wrap xs:flex-col sm:flex-col md:flex-col   gap-4 ">
             <div className="2xl:w-[416px] xl:w-[350px]  lg:w-[250px] md:w-[350px] sm:w-[336px] xs:w-[336px] flex flex-col gap-1.5">
               <label className="flex-grow-0  flex-shrink-0 text-xs font-medium text-left text-[#344054]">Birthday</label>
-              <DatePickerDemo />
+              <DatePickerDemo handleBirthdayChange={handleBirthdayChange} birthday={birthday} setBirthday={setBirthday}/>
             </div>
             <div className="2xl:w-[416px] xl:w-[350px]  lg:w-[250px] md:w-[350px] sm:w-[336px] xs:w-[336px] flex flex-col gap-1.5">
-              <TextInput label="Phone Number" placeholder="Phone Number" type="number" />
+              <TextInput label="Phone Number" placeholder="Phone Number" type="text" value={phoneNumber} onChange={handlePhoneNumberChange} />
             </div>
           </div>
           <div className="sm:my-2 my-4 flex  md:flex-wrap sm:flex-wrap xs:flex-col sm:flex-col md:flex-col   gap-4 ">
             <div className="2xl:w-[416px] xl:w-[350px]  lg:w-[250px] md:w-[350px] sm:w-[336px] xs:w-[336px] flex flex-col gap-1.5">
-              <TextInput label="Email" placeholder="Email" type="email" />
+              <TextInput label="Email" placeholder="Email" type="email"  value={email} onChange={handleEmailChange}/>
             </div>
             <div className="2xl:w-[416px] xl:w-[350px]  lg:w-[250px] md:w-[350px] sm:w-[336px] xs:w-[336px] flex flex-col gap-1.5">
               <label className="flex-grow-0 flex-shrink-0 text-xs font-medium text-left text-[#344054]">Gender</label>
-              <SelectDemo />
+               <SelectDemo gender={gender} handleGenderChange={handleGenderChange} setGender={setGender}/>
             </div>
           </div>
 
@@ -214,18 +296,18 @@ function AccountDetails() {
             </div>
           </div>
           <div className="sm:my-2 flex md:flex-wrap sm:flex-wrap xs:flex-col sm:flex-col md:flex-col gap-4">
-            <TextInput label="Apartment Details" placeholder="Apartment Details" type="text"  />
-            <TextInput label="Street Address" placeholder="Street Address" type="text"  />
+            <TextInput label="Apartment Details" placeholder="Apartment Details" type="text" value={apartmentDetails} onChange={handleApartmentDetailsChange}/>
+            <TextInput label="Street Address" placeholder="Street Address" type="text" value={streetAddress} onChange={handleStreetAddressChange}/>
           </div>
           <div className="sm:my-2 flex  md:flex-wrap sm:flex-wrap xs:flex-col sm:flex-col md:flex-col  gap-4 ">  <div className="2xl:w-[416px] xl:w-[350px]  lg:w-[250px] md:w-[350px] sm:w-[336px] xs:w-[336px] flex flex-col gap-1.5">
-            <TextInput label="Country" placeholder="Country" type="text" />
+            <TextInput label="Country" placeholder="Country" type="text" value={country} onChange={handleCountryChange}/>
           </div>
             <div className="2xl:w-[416px] xl:w-[350px]  lg:w-[250px] md:w-[350px] sm:w-[336px] xs:w-[336px] flex flex-col gap-1.5">
-              <TextInput label="City/Town" placeholder="City/Town" type="text" />
+              <TextInput label="City/Town" placeholder="City/Town" type="text" value={city} onChange={handleCityChange}/>
             </div>
           </div>
           <div className="2xl:w-[416px] xl:w-[350px]  lg:w-[250px] md:w-[350px] sm:w-[336px] xs:w-[336px] flex flex-col gap-1.5">
-            <TextInput label="Postal code" placeholder="Postal code" type="text" />
+            <TextInput label="Postal code" placeholder="Postal code" type="text" value={postalCode} onChange={handlePostalCodeChange}/>
           </div>
         </div>
 
@@ -257,7 +339,6 @@ function AccountDetails() {
             </div>
           </div>
           <div className="sm:my-2 flex  md:flex-wrap sm:flex-wrap xs:flex-col sm:flex-col md:flex-col  gap-4 ">
-
             <div className="2xl:w-[416px] xl:w-[350px]  lg:w-[250px] md:w-[350px] sm:w-[336px] xs:w-[336px] flex flex-col gap-1.5">
               <label className="flex-grow-0 flex-shrink-0 text-xs font-medium text-left text-[#344054]">Old Password</label>
               <div className="relative w-full">
@@ -313,8 +394,9 @@ function AccountDetails() {
           </div>
         </div>
         <div className="flex justify-end items-center self-stretch flex-grow-0 flex-shrink-0 gap-1 py-6 bg-white border-t border-r-0 border-b-0 border-l-0 border-[#eaecf0] ">
-          <div
-            className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative overflow-hidden gap-2 px-5 py-3 rounded-lg bg-[#66004b] border-0 border-[#66004b] 2xl:w-[336px] xl:w-[336px] min-w-[160px]"
+          <button
+              onClick={handleUpdateProfile}
+              className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative overflow-hidden gap-2 px-5 py-3 rounded-lg bg-[#66004b] border-0 border-[#66004b] 2xl:w-[336px] xl:w-[336px] min-w-[160px]"
             style={{ boxShadow: "0px 1px 2px 0 rgba(16,24,40,0.05)" }}
           >
             <svg
@@ -337,10 +419,12 @@ function AccountDetails() {
             <p className="flex-grow-0 flex-shrink-0 text-base font-semibold text-left text-white">
               Save Changes
             </p>
-          </div>
+          </button>
         </div>
         </div>
+
           </div>
+
         </div>
         </div>
         </div>

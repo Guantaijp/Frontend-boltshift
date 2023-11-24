@@ -2,10 +2,13 @@ import Navbar from '../Navbar.tsx'
 import gear from '../../assets/profile/Gear.svg'
 import AccountLayout from './AccountLayout.tsx'
 import Footer from '../Footer.tsx'
+import {useEffect} from "react";
 
 
-function Payment() {
-
+function Payment({profileData,getProfileData}:any) {
+  useEffect(() => {
+    getProfileData();
+  }, []);
 
   return (
     <>
@@ -90,7 +93,7 @@ function Payment() {
         </div>
       </div>
       <div className="flex">
-        <AccountLayout />
+        <AccountLayout profileData={profileData}/>
         <div style={{ width: 'calc(100% - 352px)' }} className="mx-8">
 
         <div className="flex flex-col justify-start items-start flex-grow">

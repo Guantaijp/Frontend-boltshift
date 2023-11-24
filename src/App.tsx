@@ -14,8 +14,32 @@ import  Voucher  from './components/Profile/Voucher.tsx'
 import Orders from './components/Profile/Orders.tsx'
 import AccountDetails from './components/Profile/AccountDetails.tsx'
 import PrivateRoute from "./routes/PrivateRoute.ts";
+import {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {getUserProfileAsyc} from "./store/reducers/auth.reducer.ts";
 function App() {
 
+    const [, setLoading] = useState(false);
+    const [profileData, setProfileData] = useState({});
+    const  dispatch = useDispatch();
+
+    useEffect(() => {
+        getProfileData();
+    }, []);
+
+    const getProfileData = async () => {
+        setLoading(true);
+        try {
+            const response = await dispatch(getUserProfileAsyc() as any);
+            setProfileData(response);
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <>             
@@ -36,10 +60,10 @@ function App() {
                         <Route path="/shopping" element={[<Shopping />,]} />
                         <Route path="/wishlist" element={[<WishList />,]} />
                         <Route path="/checkout" element={[<CheckOut />,]} />
-                        <Route path="/account/profile" element={<PrivateRoute><AccountDetails /></PrivateRoute>}/>
-                        <Route path="/account/orders" element={<PrivateRoute><Orders /></PrivateRoute>}/>
-                        <Route path="/account/payment" element={<PrivateRoute><Payment /></PrivateRoute>}/>
-                        <Route path="/account/voucher" element={<PrivateRoute><Voucher /></PrivateRoute>}/>
+                        <Route path="/account/profile" element={<PrivateRoute><AccountDetails profileData={profileData} getProfileData={getProfileData} /></PrivateRoute>}/>
+                        <Route path="/account/orders" element={<PrivateRoute><Orders profileData={profileData} getProfileData={getProfileData}/></PrivateRoute>}/>
+                        <Route path="/account/payment" element={<PrivateRoute><Payment profileData={profileData} getProfileData={getProfileData} /></PrivateRoute>}/>
+                        <Route path="/account/voucher" element={<PrivateRoute><Voucher profileData={profileData} getProfileData={getProfileData} /></PrivateRoute>}/>
                         <Route path="*" element={[<NotFound />,]} />
                     </Routes>
                   </Router> 
